@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,13 +126,20 @@
             display: block;
         }
 
-        a {
-            text-decoration: none;
+        .success-message {
+            text-align: center;
+            color: green;
+            font-size: 1.5em;
+            margin-top: 20px;
         }
-
-        a:hover {
-            text-decoration: underline;
-        }
+       .success-message button{
+	        
+	        background-color: red;
+	        color: azure;
+    	}
+     .success-message button:hover{
+        	background-color: green;
+    	}
     </style>
 </head>
 <body>
@@ -140,105 +147,120 @@
         <div class="signup-header">
             <h1>User's Details</h1>
         </div>
-        <div class="tab">
-            <button class="tablinks active" onclick="openSignupForm(event, 'login')">User's login</button>
-            <button class="tablinks" onclick="openSignupForm(event, 'signup')">User's signup</button>
-        </div>
-        <div id="login" class="signup-form active">
-            <form action="login" method="post">
-                <div class="form-group">
-                    <label for="Username">Username:</label>
-                    <input type="text" id="Username" name="username" placeholder="Enter your Username" required>
-                </div>
-                <div class="form-group">
-                    <label for="Password">Password:</label>
-                    <input type="password" id="Password" name="password" placeholder="Enter your Password" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Login</button>
-                </div>
-                <div class="error-message"><!-- Error messages will appear here --></div>
-            </form>
-        </div>
-        <div id="signup" class="signup-form">
-            <form action="signup" method="post">
-                <div class="form-group">
-                    <label for="FirstName">First Name:</label>
-                    <input type="text" id="FirstName" name="fname" required>
-                </div>
-                <div class="form-group">
-                    <label for="LastName">Last Name:</label>
-                    <input type="text" id="LastName" name="lname" required>
-                </div>
-                <div class="form-group">
-                    <label for="DOB">Date of Birth:</label>
-                    <input type="date" id="DOB" name="dob" required>
-                </div>
-                <div class="form-group">
-                    <label for="Gender">Gender:</label>
-                    <input type="radio" id="male" name="gender" value="MALE">
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="FEMALE">
-                    <label for="female">Female</label>
-                    <input type="radio" id="Neutral" name="gender" value="NEUTRAL">
-                    <label for="Neutral">Neutral</label>
-                </div>
-                <div class="form-group">
-                    <label for="passing">Passing Marks:</label>
-                    <input type="number" id="passing" name="marks" placeholder="Enter last board exam marks" required>
-                </div>
-                <div class="form-group">
-                    <label for="percentage">Percentage(%):</label>
-                    <input type="number" step="0.1" id="Percentage" name="percentage" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="Email">Email:</label>
-                    <input type="email" id="Email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="Phone">Phone:</label>
-                    <input type="tel" id="Phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="Year">Joining Year:</label>
-                    <select id="Year" name="year" required>
-                        <option value="">Select Year</option>
-                        <option value="2016">2016</option>
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="Branch">Branch:</label>
-                    <select id="Branch" name="branch" required>
-                        <option value="">Select Branch</option>
-                        <option value="CSE">CSE</option>
-                        <option value="ECE">ECE</option>
-                        <option value="EEE">EEE</option>
-                        <option value="Mechanical">Mechanical</option>
-                        <option value="Chemical">Chemical</option>
-                        <option value="Agriculture">Agriculture</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="Address">Address:</label>
-                    <textarea name="address" id="Address" required></textarea>
-                </div>
-                <div class="form-group">
-                    <button type="submit">Sign Up</button>
-                </div>
-                <div class="error-message"><!-- Error messages will appear here --></div>
-            </form>
-        </div>
+
+        <%
+            HttpSession session3 = request.getSession(false);
+            Boolean isLoggedIn = (session3 != null) ? (Boolean) session3.getAttribute("isLoggedIn") : null;
+            if (isLoggedIn != null && isLoggedIn) {
+        %>
+            <div class="success-message">You have successfully logged in!
+            <button onclick="redirectToLogin()">Logout</button></div>
+        <% session3.invalidate();
+        } else { %>
+            <div class="tab">
+                <button class="tablinks active" onclick="openSignupForm(event, 'login')">User's login</button>
+                <button class="tablinks" onclick="openSignupForm(event, 'signup')">User's signup</button>
+            </div>
+            <div id="login" class="signup-form active">
+                <form action="login" method="post">
+                    <div class="form-group">
+                        <label for="Username">Username:</label>
+                        <input type="text" id="Username" name="username" placeholder="Enter your Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Password">Password:</label>
+                        <input type="password" id="Password" name="password" placeholder="Enter your Password" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Login</button>
+                    </div>
+                    <div class="error-message"><!-- Error messages will appear here --></div>
+                </form>
+            </div>
+            <div id="signup" class="signup-form">
+                <form action="signup" method="post">
+                    <div class="form-group">
+                        <label for="FirstName">First Name:</label>
+                        <input type="text" id="FirstName" name="fname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="LastName">Last Name:</label>
+                        <input type="text" id="LastName" name="lname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="DOB">Date of Birth:</label>
+                        <input type="date" id="DOB" name="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Gender">Gender:</label>
+                        <input type="radio" id="male" name="gender" value="MALE">
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value="FEMALE">
+                        <label for="female">Female</label>
+                        <input type="radio" id="Neutral" name="gender" value="NEUTRAL">
+                        <label for="Neutral">Neutral</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="passing">Passing Marks:</label>
+                        <input type="number" id="passing" name="marks" placeholder="Enter last board exam marks" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="percentage">Percentage(%):</label>
+                        <input type="number" step="0.1" id="Percentage" name="percentage" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email:</label>
+                        <input type="email" id="Email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">Phone:</label>
+                        <input type="tel" id="Phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Year">Joining Year:</label>
+                        <select id="Year" name="year" required>
+                            <option value="">Select Year</option>
+                            <option value="2016">2016</option>
+                            <option value="2017">2017</option>
+                            <option value="2018">2018</option>
+                            <option value="2019">2019</option>
+                            <option value="2020">2020</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Branch">Branch:</label>
+                        <select id="Branch" name="branch" required>
+                            <option value="">Select Branch</option>
+                            <option value="CSE">CSE</option>
+                            <option value="ECE">ECE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="Mechanical">Mechanical</option>
+                            <option value="Chemical">Chemical</option>
+                            <option value="Agriculture">Agriculture</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Address">Address:</label>
+                        <textarea name="address" id="Address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Sign Up</button>
+                    </div>
+                    <div class="error-message"><!-- Error messages will appear here --></div>
+                </form>
+            </div>
+        <% } %>
     </div>
     <script>
+    
+    	function redirectToLogin() {
+        	window.location.href = "/Registration_Project/details.jsp";
+    		}
+    
         function openSignupForm(evt, formType) {
             var i, form, tablinks;
             form = document.getElementsByClassName("signup-form");

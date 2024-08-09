@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class LoginServlet
@@ -21,7 +22,9 @@ public class LoginServlet extends HttpServlet {
 		if(connection.SearchByUsername(username)){
 			String password = connection.getPassword(username);
 			if(pass.equals(password)) {
-				response.sendRedirect("home.jsp");
+				HttpSession session = request.getSession();
+				session.setAttribute("isLoggedIn", true);
+				response.sendRedirect("details.jsp");
 				
 			}
 			else {
